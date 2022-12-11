@@ -1,0 +1,39 @@
+{
+    "name": "theartoffilm",
+    "version": "1",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "dev": "env-cmd -f .env.development.local npx nodemon index.js",
+        "start:local": "env-cmd -f .env.development.local node index.js",
+        "start": "node index.js"
+    },
+    "repository": {
+        "type": "git"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@paypal/react-paypal-js": "^7.8.1",
+        "@stripe/react-stripe-js": "^1.9.0",
+        "@stripe/stripe-js": "^1.32.0",
+        "bcryptjs": "^2.4.3",
+        "cloudinary": "^1.30.0",
+        "cookie-parser": "^1.4.6",
+        "cors": "^2.8.5",
+        "dotenv": "^10.0.0",
+        "env-cmd": "^10.1.0",
+        "express": "^4.17.1",
+        "express-async-handler": "^1.2.0",
+        "express-fileupload": "^1.4.0",
+        "jsonwebtoken": "^8.5.1",
+        "mailgun-js": "^0.22.0",
+        "mongoose": "^6.0.13",
+        "multer": "^1.4.5-lts.1",
+        "nodemailer": "^6.7.8",
+        "socket.io": "^4.5.3",
+        "streamifier": "^0.1.1",
+        "stripe": "^9.9.0",
+        "voucher-code-generator": "^1.3.0"
+    }
+}
