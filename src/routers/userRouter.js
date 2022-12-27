@@ -48,9 +48,6 @@ userRouter.post(
     "/signin",
     expressAsyncHandler(async (req, res) => {
         try {
-            console.log(process.env.NODE_ENV === "production");
-            console.log(req.cookies);
-
             const user = await User.findOne({ email: req.body.email });
             if (!user || !bcrypt.compare(req.body.password, user.password))
                 res.status(401).json({ message: "Invalid email or password" });
@@ -228,8 +225,9 @@ userRouter.post(
 
             const onSuccess = () => res.json({ message: "Check your email for the link to reset your password" });
             const onError = () => res.status(500).json({ message: "Error in sending email" });
-            sendEmail(passwordResetEmail({ host: req.headers.host, email: user.email, token }), onSuccess, onError);
+            sendEmail(passwordResetEmail({ host: process.env.WEB_APP, email: user.email, token }), onSuccess, onError);
         } catch (error) {
+            console.log(error);
             return res.status(500).json(error);
         }
     })
