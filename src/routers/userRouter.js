@@ -48,6 +48,9 @@ userRouter.post(
     "/signin",
     expressAsyncHandler(async (req, res) => {
         try {
+            console.log(process.env.NODE_ENV);
+            console.log(req.cookies);
+
             const user = await User.findOne({ email: req.body.email });
             if (!user || !bcrypt.compare(req.body.password, user.password))
                 res.status(401).json({ message: "Invalid email or password" });
@@ -60,6 +63,7 @@ userRouter.post(
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
                     maxAge: 60 * 60 * 24 * 30,
+                    path: "/",
                 })
             );
 
@@ -191,6 +195,7 @@ userRouter.post(
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
                     maxAge: 60 * 60 * 24 * 30,
+                    path: "/",
                 })
             );
 
