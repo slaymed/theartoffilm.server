@@ -59,7 +59,6 @@ userRouter.post(
                 cookie.serialize("access_token", token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
-                    sameSite: "strict",
                     maxAge: 60 * 60 * 24 * 30,
                     path: "/",
                 })
@@ -87,7 +86,6 @@ userRouter.post(
                 "Set-Cookie",
                 cookie.serialize("access_token", "", {
                     secure: process.env.NODE_ENV === "production",
-                    sameSite: "strict",
                     expires: new Date(0),
                     path: "/",
                 })
@@ -193,7 +191,6 @@ userRouter.post(
                 cookie.serialize("access_token", token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
-                    sameSite: "strict",
                     maxAge: 60 * 60 * 24 * 30,
                     path: "/",
                 })
