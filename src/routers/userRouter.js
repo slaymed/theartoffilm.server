@@ -48,7 +48,7 @@ userRouter.post(
     "/signin",
     expressAsyncHandler(async (req, res) => {
         try {
-            console.log(process.env.NODE_ENV);
+            console.log(process.env.NODE_ENV === "production");
             console.log(req.cookies);
 
             const user = await User.findOne({ email: req.body.email });
@@ -60,8 +60,8 @@ userRouter.post(
             res.set(
                 "Set-Cookie",
                 cookie.serialize("access_token", token, {
-                    httpOnly: true,
-                    // secure: process.env.NODE_ENV === "production",
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "none",
                     maxAge: 60 * 60 * 24 * 30,
                     path: "/",
                 })
@@ -88,7 +88,8 @@ userRouter.post(
             res.set(
                 "Set-Cookie",
                 cookie.serialize("access_token", "", {
-                    // secure: process.env.NODE_ENV === "production",
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "none",
                     expires: new Date(0),
                     path: "/",
                 })
@@ -192,8 +193,8 @@ userRouter.post(
             res.set(
                 "Set-Cookie",
                 cookie.serialize("access_token", token, {
-                    httpOnly: true,
-                    // secure: process.env.NODE_ENV === "production",
+                    sameSite: "none",
+                    secure: process.env.NODE_ENV === "production",
                     maxAge: 60 * 60 * 24 * 30,
                     path: "/",
                 })
