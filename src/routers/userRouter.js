@@ -61,9 +61,8 @@ userRouter.post(
                 "Set-Cookie",
                 cookie.serialize("access_token", token, {
                     httpOnly: true,
-                    secure: process.env.NODE_ENV === "production",
+                    // secure: process.env.NODE_ENV === "production",
                     maxAge: 60 * 60 * 24 * 30,
-                    sameSite: "none",
                     path: "/",
                 })
             );
@@ -89,9 +88,8 @@ userRouter.post(
             res.set(
                 "Set-Cookie",
                 cookie.serialize("access_token", "", {
-                    secure: process.env.NODE_ENV === "production",
+                    // secure: process.env.NODE_ENV === "production",
                     expires: new Date(0),
-                    sameSite: "none",
                     path: "/",
                 })
             );
@@ -195,9 +193,8 @@ userRouter.post(
                 "Set-Cookie",
                 cookie.serialize("access_token", token, {
                     httpOnly: true,
-                    secure: process.env.NODE_ENV === "production",
+                    // secure: process.env.NODE_ENV === "production",
                     maxAge: 60 * 60 * 24 * 30,
-                    sameSite: "none",
                     path: "/",
                 })
             );
