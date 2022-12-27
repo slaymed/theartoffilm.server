@@ -1,6 +1,7 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
+import cookie from "cookie";
 
 import User from "../models/userModel.js";
 import { generateToken, isAuth } from "../utils.js";
@@ -48,16 +49,21 @@ userRouter.post(
     expressAsyncHandler(async (req, res) => {
         try {
             const user = await User.findOne({ email: req.body.email });
-            if (!user || !bcrypt.compareSync(req.body.password, user.password))
+            if (!user || !bcrypt.compare(req.body.password, user.password))
                 res.status(401).json({ message: "Invalid email or password" });
 
             const token = generateToken(user._id.toString());
 
-            res.cookie("access_token", token, {
-                maxAge: 1000 * 60 * 60 * 24 * 30,
-                secure: true,
-                sameSite: "none",
-            });
+            res.set(
+                "Set-Cookie",
+                cookie.serialize("access_token", token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: 60 * 60 * 24 * 30,
+                    path: "/",
+                })
+            );
 
             if (req.body.socketId) {
                 const found = await Socket.findOne({ socketId: req.body.socketId });
@@ -77,7 +83,15 @@ userRouter.post(
     isAuth,
     expressAsyncHandler(async (req, res) => {
         try {
-            res.clearCookie("access_token", { secure: true });
+            res.set(
+                "Set-Cookie",
+                cookie.serialize("access_token", "", {
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    expires: new Date(0),
+                    path: "/",
+                })
+            );
 
             if (req.body.socketId) {
                 const socket = await Socket.findOne({ socketId: req.body.socketId });
@@ -86,6 +100,7 @@ userRouter.post(
 
             return res.status(200).json(null);
         } catch (error) {
+            console.log(error);
             return res.status(500).json(error);
         }
     })
@@ -173,11 +188,16 @@ userRouter.post(
 
             const token = generateToken(createdUser._id.toString());
 
-            res.cookie("access_token", token, {
-                secure: true,
-                maxAge: 1000 * 60 * 60 * 24 * 30,
-                sameSite: "none",
-            });
+            res.set(
+                "Set-Cookie",
+                cookie.serialize("access_token", token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: 60 * 60 * 24 * 30,
+                    path: "/",
+                })
+            );
 
             if (socketId) {
                 const found = await Socket.findOne({ socketId: socketId });
